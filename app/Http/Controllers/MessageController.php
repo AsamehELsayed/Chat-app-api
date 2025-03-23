@@ -31,22 +31,20 @@ class MessageController extends Controller
 }
 public function getMessages($userId)
 {
-    if (User::where('id', $userId)->exists()) {
-        return response()->json(['error' => 'user not found'], 404);
-    }
+
     $messages = Message::where(function ($query) use ($userId) {
         $query->where('sender_id', Auth::id())
               ->where('receiver_id', $userId);
     })->orWhere(function ($query) use ($userId) {
         $query->where('sender_id', $userId)
               ->where('receiver_id', Auth::id());
-    })->orderBy('created_at', 'desc')
+    })
       ->paginate(20);
 
-      Message::where('sender_id', $userId)
-      ->where('receiver_id', Auth::id())
-      ->where('status', 'sent')
-      ->update(['status' => 'read']);
+    //   Message::where('sender_id', $userId)
+    //   ->where('receiver_id', Auth::id())
+    //   ->where('status', 'sent')
+    //   ->update(['status' => 'read']);
 
 
     return response()->json($messages);
@@ -58,9 +56,9 @@ public function markAsRead($messageId)
     if (!$message) {
         return response()->json(['error' => 'message not found'], 404);
     }
-    // if ($message->receiver_id !== Auth::id()) {
-    //     return response()->json(['error' => 'Unauthorized'], 403);
-    // }
+    if ($message->receiver_id !== Auth::id()) {
+        return response()->json(['error' => 'Unauthorized'], 403);
+    }
 
     $message->status = 'read';
     $message->save();
