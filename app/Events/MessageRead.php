@@ -32,6 +32,7 @@ class MessageRead implements ShouldBroadcast ,ShouldQueue
             'sender_id'   => $this->message->sender_id,
             'receiver_id' => $this->message->receiver_id,
             'status'      => $this->message->status,
+            'type'        => 'read',
             'updated_at'  => $this->message->updated_at->toDateTimeString(),
         ];
     }
