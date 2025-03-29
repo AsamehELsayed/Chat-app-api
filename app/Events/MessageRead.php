@@ -22,7 +22,7 @@ class MessageRead implements ShouldBroadcast ,ShouldQueue
 
     public function broadcastOn()
     {
-        return new PrivateChannel('user.' . $this->message->sender_id);
+        return new PrivateChannel('user.' . $this->message->receiver_id);
     }
 
     public function broadcastWith()

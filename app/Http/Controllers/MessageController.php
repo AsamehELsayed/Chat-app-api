@@ -41,10 +41,10 @@ public function getMessages($userId)
     })
       ->paginate(20);
 
-    //   Message::where('sender_id', $userId)
-    //   ->where('receiver_id', Auth::id())
-    //   ->where('status', 'sent')
-    //   ->update(['status' => 'read']);
+      Message::where('sender_id', $userId)
+      ->where('receiver_id', Auth::id())
+      ->where('status', 'sent')
+      ->update(['status' => 'read']);
 
 
     return response()->json($messages);
